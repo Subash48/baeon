@@ -8,15 +8,19 @@ const cookieParser = require('cookie-parser');
 const mongoose = require('mongoose');
 const passport = require('passport')
 const helmet   = require('helmet');
-
+const path = require('path');
 app.use(cookieParser()); // To parse jwt
 app.use(express.json()); // To read post requests
 app.use(express.urlencoded({ extended: true }));
 app.use(helmet());
 app.set('view engine','ejs');                   //Templating engine
-app.use(express.static('views'));
+//app.use(express.static('views'));
 
 //Update when moving to production
+app.use(express.static(path.join(__dirname, 'build')));
+app.get('/', function (req, res) {
+   res.sendFile(path.join(__dirname, 'build', 'index.html'));
+ });
 app.use(cors({
     origin: [
       'http://3.23.97.19:3000'

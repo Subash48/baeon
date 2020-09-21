@@ -1,0 +1,32 @@
+{
+  "files": {
+    "main.css": "/static/css/main.5b833269.chunk.css",
+    "main.js": "/static/js/main.9bd7b6a8.chunk.js",
+    "main.js.map": "/static/js/main.9bd7b6a8.chunk.js.map",
+    "runtime-main.js": "/static/js/runtime-main.47788c5d.js",
+    "runtime-main.js.map": "/static/js/runtime-main.47788c5d.js.map",
+    "static/js/2.f15a0d91.chunk.js": "/static/js/2.f15a0d91.chunk.js",
+    "static/js/2.f15a0d91.chunk.js.map": "/static/js/2.f15a0d91.chunk.js.map",
+    "index.html": "/index.html",
+    "precache-manifest.6dfd9830dbe3bd04d86cd84b78fe2ecb.js": "/precache-manifest.6dfd9830dbe3bd04d86cd84b78fe2ecb.js",
+    "service-worker.js": "/service-worker.js",
+    "static/css/main.5b833269.chunk.css.map": "/static/css/main.5b833269.chunk.css.map",
+    "static/js/2.f15a0d91.chunk.js.LICENSE.txt": "/static/js/2.f15a0d91.chunk.js.LICENSE.txt",
+    "static/media/Ico.jpg": "/static/media/Ico.9845d0c3.jpg",
+    "static/media/LogoBgImage.png": "/static/media/LogoBgImage.6d8d27d2.png",
+    "static/media/apiBg.jpg": "/static/media/apiBg.b68a9c24.jpg",
+    "static/media/bg2.jpg": "/static/media/bg2.d757f5fc.jpg",
+    "static/media/gifts.jpg": "/static/media/gifts.62d35051.jpg",
+    "static/media/growth.png": "/static/media/growth.162c65a5.png",
+    "static/media/market.jpg": "/static/media/market.15505124.jpg",
+    "static/media/reach.png": "/static/media/reach.0da55187.png",
+    "static/media/reset.JPG": "/static/media/reset.323e4b19.JPG",
+    "static/media/sales2.jpg": "/static/media/sales2.dae3e167.jpg"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.47788c5d.js",
+    "static/js/2.f15a0d91.chunk.js",
+    "static/css/main.5b833269.chunk.css",
+    "static/js/main.9bd7b6a8.chunk.js"
+  ]
+}
