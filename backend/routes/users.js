@@ -42,7 +42,7 @@ userRouter.post('/register',async (req,res)=>{
             mobileno : req.body.mobileno,
             password : hashedPassword,
             role     : "user",
-            emailVerified : false,
+            emailVerified : true,
             phoneVerified : false,
             resetPasswordToken : token,
             resetPasswordExpires : Date.now() + 3600000,
