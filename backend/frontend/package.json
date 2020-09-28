@@ -67,5 +67,5 @@
     ],
     "development": []
   },
-  "proxy": "http://3.23.97.19:5000"
+  "proxy": "http://localhost:5000"
 }

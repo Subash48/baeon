@@ -17,18 +17,23 @@ app.set('view engine','ejs');                   //Templating engine
 //app.use(express.static('views'));
 
 //Update when moving to production
-app.use(express.static(path.join(__dirname, 'build')));
+app.use(express.static(path.join(__dirname, 'frontend/build')));
 app.get('/', function (req, res) {
-   res.sendFile(path.join(__dirname, 'build', 'index.html'));
+   res.sendFile(path.join(__dirname, 'frontend/build', 'index.html'));
  });
-app.use(cors({
+ /*app.use(cors({
     origin: [
-      'http://3.23.97.19:3000'
+     //  'http://3.23.97.19:3000',
+	//  'https://fonts.googleapis.com/' ,
+	//  'https://use.fontawesome.com'
     //   'http://localhost:3000',
      ],
     credentials: true
   }))         // To allow cross origin requests
 
+*/
+app.options('*', cors()) // include before other routes
+//app.use(cors())
 
 app.use(passport.initialize());
 
