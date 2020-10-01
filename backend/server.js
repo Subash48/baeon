@@ -12,7 +12,16 @@ const path = require('path');
 app.use(cookieParser()); // To parse jwt
 app.use(express.json()); // To read post requests
 app.use(express.urlencoded({ extended: true }));
-app.use(helmet());
+//app.use(helmet());
+app.use(
+  helmet.contentSecurityPolicy({
+    directives: {
+      "default-src": ["'self'"],
+      "script-src": ["'self'", "example.com"],
+      "object-src": ["'none'"],
+    },
+  })
+);
 app.set('view engine','ejs');                   //Templating engine
 //app.use(express.static('views'));
 
@@ -20,7 +29,13 @@ app.set('view engine','ejs');                   //Templating engine
 app.use(express.static(path.join(__dirname, 'frontend/build')));
 app.get('/', function (req, res) {
    res.sendFile(path.join(__dirname, 'frontend/build', 'index.html'));
- });
+});
+// app.use('/', express.static('./frontend/build'));
+//production modeif(process.env.NODE_ENV === 'production') {
+ //app.use(express.static(path.join(__dirname, 'frontend/build')));
+ //app.get('*', (req, res) => {    res.sendFile(path.join(__dirname+'/frontend/public/index.html'));  });
+  //  app.get('*', (req, res) => {    res.sendfile(path.join(__dirname = 'client/build/index.html'));  })}
+
  /*app.use(cors({
     origin: [
      //  'http://3.23.97.19:3000',
@@ -32,8 +47,8 @@ app.get('/', function (req, res) {
   }))         // To allow cross origin requests
 
 */
-app.options('*', cors()) // include before other routes
-//app.use(cors())
+//app.options('*', cors()) // include before other routes
+app.use(cors());
 
 app.use(passport.initialize());
 
