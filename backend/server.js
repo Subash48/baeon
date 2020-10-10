@@ -13,15 +13,15 @@ app.use(cookieParser()); // To parse jwt
 app.use(express.json()); // To read post requests
 app.use(express.urlencoded({ extended: true }));
 //app.use(helmet());
-app.use(
-  helmet.contentSecurityPolicy({
-    directives: {
-      "default-src": ["'self'"],
-      "script-src": ["'self'", "example.com"],
-      "object-src": ["'none'"],
-    },
-  })
-);
+// app.use(
+//   helmet.contentSecurityPolicy({
+//     directives: {
+//       "default-src": ["'self'"],
+//       "script-src": ["'self'", "example.com"],
+//       "object-src": ["'none'"],
+//     },
+//   })
+// );
 app.set('view engine','ejs');                   //Templating engine
 //app.use(express.static('views'));
 
