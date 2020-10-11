@@ -22,12 +22,12 @@ app.use(express.urlencoded({ extended: true }));
 //     },
 //   })
 // );
-app.set('view engine','ejs');                   //Templating engine
+//app.set('view engine','ejs');                   //Templating engine
 //app.use(express.static('views'));
 
 //Update when moving to production
 app.use(express.static(path.join(__dirname, 'frontend/build')));
-app.get('/', function (req, res) {
+app.get('*', function (req, res) {
    res.sendFile(path.join(__dirname, 'frontend/build', 'index.html'));
 });
 // app.use('/', express.static('./frontend/build'));
