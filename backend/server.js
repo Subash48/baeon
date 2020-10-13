@@ -24,10 +24,19 @@ app.use(express.urlencoded({ extended: true }));
 // );
 //app.set('view engine','ejs');                   //Templating engine
 //app.use(express.static('views'));
+/* Routes handling */
+const userRouter = require('./routes/users');
+app.use('/user',userRouter);
+
+const merchantRouter = require('./routes/merchants');
+app.use('/merchant',merchantRouter);
+
+const apiRouter = require('./routes/api');
+app.use('/api',apiRouter);
 
 //Update when moving to production
 app.use(express.static(path.join(__dirname, 'frontend/build')));
-app.get('*', function (req, res) {
+app.get('/*', function (req, res) {
    res.sendFile(path.join(__dirname, 'frontend/build', 'index.html'));
 });
 // app.use('/', express.static('./frontend/build'));
@@ -74,15 +83,6 @@ mongoose.connect(mongoURI,{useNewUrlParser : true,useUnifiedTopology: true},()=>
     console.log('successfully connected to database');
 });
 
-/* Routes handling */
-const userRouter = require('./routes/users');
-app.use('/user',userRouter);
-
-const merchantRouter = require('./routes/merchants');
-app.use('/merchant',merchantRouter);
-
-const apiRouter = require('./routes/api');
-app.use('/api',apiRouter);
 
 /* Server config */
 module.exports = app.listen(5000,()=>{
