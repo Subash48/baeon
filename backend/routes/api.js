@@ -50,14 +50,14 @@ const upload = multer({
     fileFilter : fileFilter
 });
 
-let transporter = nodemailer.createTransport({ 
-    service: 'gmail', 
-    auth: { 
-        user: 'contact@baeon.co', 
+let transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+        user: 'contact@baeon.co',
         pass: ''
-    } 
-}); 
-    
+    }
+});
+
 apiRouter.get('/',passport.authenticate('headerapikey', { session: false, failureRedirect: '/api/unauthorized' }),(req,res)=>{
     res.json({
         message : 'Welcome to the API for Q-UP !'
@@ -74,7 +74,7 @@ apiRouter.get('/unauthorized',(req,res)=>{
 apiRouter.post('/promotion/add',passport.authenticate('headerapikey',{ session : false , failureRedirect : '/api/unauthorized'}),upload.single('couponImage'),(req,res)=>{
     Merchant.findOne({ email : req.user.email })
     .then((user)=>{
-    
+
 
     if(!req.body.couponTitle)
     {
@@ -123,7 +123,7 @@ apiRouter.post('/promotion/add',passport.authenticate('headerapikey',{ session :
 
 //  /getpromotion?lat=latVal&lng=lngVal
 apiRouter.get('/getpromotion',passport.authenticate('headerapikey',{ session : false , failureRedirect : '/api/unauthorized'}),(req,res)=>{
-   
+
     Merchant.findOne({ email : req.user.email })
     .then((user)=>{
     //   Coupon.find({ merchantId : user._id })
@@ -252,7 +252,7 @@ apiRouter.get('/distance',(req,res)=>{
                       res.send(vincentyDist)
                 }).catch((err) => res.send(err))
             }).catch((err) => res.send(err))
-              
+
 });
 
 
@@ -264,7 +264,7 @@ apiRouter.get('/distance',(req,res)=>{
 apiRouter.get('/viewcoupons',(req,res)=>{
 
     User.findOne({ apikey: req.query.apikey })
-    .then((user)=>{ 
+    .then((user)=>{
         Merchant.findOne({ email : user.email })
         .then((individual) =>{
         Coupon.find({ merchantId :  individual._id})
@@ -317,7 +317,7 @@ apiRouter.get('/myinventory',(req,res)=>{
     .then((user)=>{
     Merchant.findOne({ email : user.email })
     .then((users)=>{
-     
+
         Product.find({ merchantId : users._id})
         .then((prods)=>{
             const products = [];
@@ -337,7 +337,7 @@ apiRouter.post('/addProduct',(req,res)=>{
     .then((users)=>{
     Merchant.findOne({ email : users.email })
     .then((user)=>{
-        
+
         if(req.body.stock <0)
         {
             res.status(422).json({ error : 'Stock Value cannot be negative' })
@@ -357,7 +357,7 @@ apiRouter.post('/addProduct',(req,res)=>{
                 "unitPrice"     : req.body.unitPrice,
             }
             );
-            console.log(user); 
+            console.log(user);
             newProduct.save()
                 .then(()=> res.status(201).json({ msg : 'Product details added successfully' } ))
                 .catch((err)=> res.status(422).json({ msg : 'There was an error in the product details', error :err }))
@@ -380,13 +380,13 @@ apiRouter.post('/addProduct',(req,res)=>{
 
 
 apiRouter.get('/couponPage',(req,res)=>{
-    
+
     //res.sendFile(path.join(__dirname + '/couponadd.html'));
     User.findOne({apikey : req.query.apikey })
     .then((user)=>{
     Merchant.findOne({ email : user.email })
     .then((users)=>{
-     
+
         Product.find({ merchantId : users._id})
         .then((prods)=>{
             // var products = [];
@@ -398,7 +398,7 @@ apiRouter.get('/couponPage',(req,res)=>{
             // longitude = users.long;
             Merchant.find({}).then(async (merch)=>{
 
-                //var filtered = merch.filter(function(el) { return el.email !== user.email; }); 
+                //var filtered = merch.filter(function(el) { return el.email !== user.email; });
                 //console.log(filtered);
                 // var filtered = await merch.filter(function(el){
                 //     return el['email'] != user.email
@@ -431,7 +431,7 @@ apiRouter.get('/getProductsByApi',(req,res)=>{
     // .then((user)=>{
     Merchant.findOne({ email : "crescita2020@gmail.com" })
     .then((users)=>{
-     
+
         Product.find({ merchantId : users._id})
         .then((prods)=>{
             product = [];
@@ -474,10 +474,10 @@ apiRouter.post('/addPromotion',upload.single('couponImage'),(req,res)=>{
 
     User.findOne({apikey : req.body.apikey })
     .then((users)=>{
-    
+
     Merchant.findOne({ email : users.email })
     .then(async (user)=>{
-    
+
     console.log(req.body.amount);
     if(!req.body.couponTitle)
     {
@@ -494,7 +494,7 @@ apiRouter.post('/addPromotion',upload.single('couponImage'),(req,res)=>{
     else if(!req.body.products)
     {
         res.json({ error : 'No product has been selected'})
-    } 
+    }
     else if(!req.body.merchants)
     {
         res.json({ error : 'No merchant has been selected'})
@@ -505,8 +505,8 @@ apiRouter.post('/addPromotion',upload.single('couponImage'),(req,res)=>{
     const id = await Math.random().toString(36).substring(7).toUpperCase();
     console.log("random", id);
     for(let i = 0 ; i< Number(req.body.noOfCoupons);i++)
-    { 
-    
+    {
+
         let code ={
             'promoCode' : String(id+i),
             'used'    : false
@@ -536,12 +536,12 @@ apiRouter.post('/addPromotion',upload.single('couponImage'),(req,res)=>{
         "businessName" : user.businessName,
         "code"         : id,
     });
-    
+
     newPromotion.save()
-    .then((data)=> 
+    .then((data)=>
     {
         let params = {
-            amount : req.body.price,  
+            amount : req.body.price,
             currency: "INR",
             receipt: "su001",
             payment_capture: '1'
@@ -564,7 +564,7 @@ apiRouter.post('/addPromotion',upload.single('couponImage'),(req,res)=>{
 });
 
 
-apiRouter.post('/displayCoupons',(req,res)=>{
+apiRouter.post('/displayCoupons',passport.authenticate('headerapikey',{ session : false , failureRedirect : '/api/unauthorized'}),(req,res)=>{
 
     //console.log(req.body);
     if(!req.body.apikey)
@@ -612,7 +612,7 @@ apiRouter.post('/displayCoupons',(req,res)=>{
                                 couponImageUrl : "http://localhost:5000/uploads/"+String(coup.couponImage).slice(8)
                             }
                             coupons.push(detail);
-                        }  
+                        }
                 }
             })
             res.send(coupons);
@@ -627,7 +627,7 @@ apiRouter.post('/displayCoupons',(req,res)=>{
 });
 
 
-apiRouter.post('/getCouponCode',(req,res)=>{
+apiRouter.post('/getCouponCode',passport.authenticate('headerapikey',{ session : false , failureRedirect : '/api/unauthorized'}),(req,res)=>{
 
     User.findOne({apikey : req.body.apikey })
     .then((users)=>{
@@ -639,7 +639,7 @@ apiRouter.post('/getCouponCode',(req,res)=>{
         console.log(coord1);
         console.log(ObjectId(req.params.id));
         //console.log( typeof ObjectId(req.query.couponId)) //_id : req.query.couponId
-        Coupon.findOne({ _id : req.body.couponId })//_id : req.query.couponId 
+        Coupon.findOne({ _id : req.body.couponId })//_id : req.query.couponId
             .then( (coupon)=>{
                 console.log(coupon);
                 console.log( typeof coupon._id);
@@ -650,7 +650,7 @@ apiRouter.post('/getCouponCode',(req,res)=>{
                       };
                      console.log(coord2);
                      let vincentyDist = geo.vincentySync(coord1, coord2);
-                     console.log(vincentyDist); 
+                     console.log(vincentyDist);
                      if(vincentyDist <=  coupon.radius)
                      {
                      Coupon.findByIdAndUpdate({ _id : coupon._id },{ couponUsed : index +1 })
@@ -668,7 +668,7 @@ apiRouter.post('/getCouponCode',(req,res)=>{
                              }).catch((err)=> res.send(err))
                     }
                     else
-                     { 
+                     {
                          res.json({ err : 'The coupon is not applicable for your location'})
                      }
                 }).catch((err) => res.json({ err : 'Error finding the coupon for this code' + err}))
@@ -677,7 +677,7 @@ apiRouter.post('/getCouponCode',(req,res)=>{
     });
 
 
-apiRouter.post('/availPromo',(req,res)=>{
+apiRouter.post('/availPromo',passport.authenticate('headerapikey',{ session : false , failureRedirect : '/api/unauthorized'}),(req,res)=>{
 
 
     User.findOne({apikey : req.body.apikey })
@@ -701,22 +701,22 @@ apiRouter.post('/availPromo',(req,res)=>{
                     {
                         if(promo['promoCodes'][index]['used'] == false)
                         {
-                            flag =1; 
+                            flag =1;
                             let coord2 = {
                                 latitude: Number(promo.lat),//39.8894840,
                                 longitude: Number(promo.long)
                               };
                               let vincentyDist = geo.vincentySync(coord1, coord2);
-                              console.log(vincentyDist); 
+                              console.log(vincentyDist);
                               if(vincentyDist <=  promo.radius)
                               {
                                 promo['promoCodes'][index]['used'] = true;
                                 Coupon.findByIdAndUpdate({ _id : promo._id },{ promoCodes : promo['promoCodes'] })
                                     .then((v) =>{
-                           
+
                                              res.json({
                                                     amount : promo.amount,
-                                                    type : promo.isPercent === true ? "Discount" : "Flat" 
+                                                    type : promo.isPercent === true ? "Discount" : "Flat"
                                                 });
                                                 }
                                 ).catch((err) => res.json({ err : 'Error finding the coupon code'}))
@@ -729,29 +729,29 @@ apiRouter.post('/availPromo',(req,res)=>{
                         else{
                             res.json({ err : 'The coupon has expired !'});
                         }
-                        
+
                     }
                  })
                  if(flag === 0)
                  {
                      res.send('Invalid coupon code');
                  }
-                
+
             })
             .catch((err)=> res.json({ error : 'Error finding Merchant account for this api key ' + err}))
-        
+
          })
         .catch((err)=> console.log(err))
         })
         .catch((err)=> res.json({ error : 'Invalid API key !'}))
-        
+
         });
 
 
 //  apiRouter.post("/payment/order",(req,res)=>{
-    
+
 //     let params = {
-//         amount : req.body.amount,  
+//         amount : req.body.amount,
 //         currency: "INR",
 //         receipt: "su001",
 //         payment_capture: '1'
@@ -762,14 +762,14 @@ apiRouter.post('/availPromo',(req,res)=>{
 //             res.send({"sub":error,"status":"failed"});
 //     })
 // });
-            
-            
-            
-            
+
+
+
+
 apiRouter.post("/payment/verify",(req,res)=>{
-            
+
 body=req.body.razorpay_order_id + "|" + req.body.razorpay_payment_id;
-            
+
 var crypto = require("crypto");
 var expectedSignature = crypto.createHmac('sha256', key.RAZOR_SECRET)
                                             .update(body.toString())
@@ -781,7 +781,7 @@ if(expectedSignature === req.body.razorpay_signature)
     response={"status":"success"}
     res.send(response);
 });
-          
+
 
 
 apiRouter.get('/pay',(req,res)=>{
@@ -805,16 +805,16 @@ sgMail.send(msg)
 
 
 
-apiRouter.post("/order", (req, res) => {  
+apiRouter.post("/order", (req, res) => {
     try {
     console.log(req.body.amount);
-    const options = {      
+    const options = {
       amount: req.body.amount*100, // amount == Rs 10
       currency: "INR",
       receipt: "receipt#1",
       payment_capture: 0,
- // 1 for automatic capture // 0 for manual capture   
- };  instance.orders.create(options, async function (err, order) {   
+ // 1 for automatic capture // 0 for manual capture
+ };  instance.orders.create(options, async function (err, order) {
       if (err) {
       return res.status(500).json({
         message: "Something Went Wrong",
@@ -828,9 +828,9 @@ apiRouter.post("/order", (req, res) => {
  }
 });
 
-apiRouter.post("/capture/:paymentId", (req, res) => {  
-    try {   
- return request(    
+apiRouter.post("/capture/:paymentId", (req, res) => {
+    try {
+ return request(
       {
     method: "POST",
     url: `https://${key.RAZOR_KEY}:${key.RAZOR_SECRET}@api.razorpay.com/v1/payments/${req.params.paymentId}/capture`,
@@ -838,22 +838,22 @@ apiRouter.post("/capture/:paymentId", (req, res) => {
        amount: 10 * 100, // amount == Rs 10 // Same As Order amount
        currency: "INR",
      },
-   },   
+   },
    async function (err, response, body) {
     if (err) {
      return res.status(500).json({
         message: err
-      }); 
-    }      
+      });
+    }
      console.log("Status:", response.statusCode);
      console.log("Headers:", JSON.stringify(response.headers));
      console.log("Response:", body);
-     return res.status(200).json(body);    
-    });  
+     return res.status(200).json(body);
+    });
 } catch (err) {
    return res.status(500).json({
      message: err.message,
-  });  
+  });
 }});
 
 
@@ -877,12 +877,12 @@ apiRouter.post('/product/add',passport.authenticate('headerapikey',{ session : f
         res.status(422).json({ msg : 'Product name missing'})
 
     }
-    else 
+    else
     {
     Merchant.findOne({ email : req.user.email })
     .then((user)=>{
-        
-        
+
+
         const newProduct = new Product(
         {
                     "merchantId" : user._id,
@@ -892,9 +892,9 @@ apiRouter.post('/product/add',passport.authenticate('headerapikey',{ session : f
                     "unitPrice"     : Number(req.body.unitPrice),
         }
         );
-        
-       
-            console.log(user); 
+
+
+            console.log(user);
             newProduct.save()
                 .then((data)=> res.status(201).json({ msg : 'Product details added successfully', productId : data._id } ))
                 .catch((err)=> res.status(422).json({ msg : 'There was an error in the product details'}))
@@ -927,7 +927,7 @@ apiRouter.get('/getproducts',passport.authenticate('headerapikey',{ session : fa
 //Delete product
 apiRouter.delete('/product',passport.authenticate('headerapikey',{ session : false , failureRedirect : '/api/unauthorized'}),(req,res)=>{
 
-   
+
    Product.findByIdAndRemove({ _id : req.query.product })
       .then((products)=>{
           if(products=== null)

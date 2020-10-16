@@ -134,7 +134,7 @@ export default function HeaderLinks(props) {
 
   <ListItem className={classes.listItem}>
         <Button
-          href="http://api.baeon.co"
+          href="http://www.baeon.co:9966"
           color="transparent"
           className={classes.navLink}
         >
