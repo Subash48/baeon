@@ -25,15 +25,35 @@ import { TextField } from '@material-ui/core';
 
 const useStyles = makeStyles(styles);
 
+
+const getStyle = (props)=>{
+    let baseClass = "alert ";
+    if(props.message.msgError)
+        baseClass = baseClass + "alert-danger";
+    else
+        baseClass = baseClass + "alert-primary";
+    return baseClass + " text-center";
+}
+
+const Message = props=>{
+    return(
+        <div className={getStyle(props)} role="alert">
+          <h3>{props.message}</ h3>
+        </div>
+    )
+}
+
+
 const Signup = props=>{
-  
+
   const [cardAnimaton, setCardAnimation] = React.useState("cardHidden");
   setTimeout(function() {
     setCardAnimation("");
   }, 700);
-  
+
   const [user,setUser] = useState({username: "",email:"",password : "",mobileno:"" });
-  
+  const [message,setMessage] = useState("");
+
   const onChange = e =>{
       setUser({...user,[e.target.name] : e.target.value});
   }
@@ -42,9 +62,20 @@ const Signup = props=>{
       e.preventDefault();
       AuthService.register(user).then(data=>{
           console.log(data);
-          props.history.push('/SignIn');
-          
-        
+          if(data.status === 201)
+          {
+            setMessage("User account created successfully !")
+            // setInterval(() => {
+            //   console.log('Interval triggered');
+            // }, 1000);
+            props.history.push('/SignIn');
+          }
+          else {
+            setMessage("Error !  Please check your details ")
+
+          }
+
+
       });
   }
 
@@ -71,6 +102,7 @@ const Signup = props=>{
         <div className={classes.container}>
           <GridContainer justify="center">
             <GridItem xs={12} sm={12} md={4}>
+            {message !== ""? <Message message={message}/> : null}
               <Card className={classes[cardAnimaton]}>
                 <form onSubmit={onSubmit}  className={classes.form}>
                   <CardHeader className={classes.cardHeader}>
@@ -80,7 +112,7 @@ const Signup = props=>{
                   <CardBody>
 
 
-                  <div style={{position: 'relative', display: 'inline-block'}}>  
+                  <div style={{position: 'relative', display: 'inline-block'}}>
                   <People style={{position: 'relative', left: 10, top: 15, width: 25, height: 35, marginRight: 30}}/>
                     <TextField
                       label="USERNAME"
@@ -91,18 +123,18 @@ const Signup = props=>{
                       onChange = {onChange}
                       formControlProps={{
                         fullWidth: true
-                      
+
                       }}
                       inputProps={{
                         type: "text"
                       }}
-                 
-                     
+
+
                     />
                     </div>
                     <br />
                     <br />
-                <div style={{position: 'relative', display: 'inline-block'}}>  
+                <div style={{position: 'relative', display: 'inline-block'}}>
                   <Email style={{position: 'relative', left: 10, top: 15, width: 25, height: 35, marginRight: 30}}/>
                     <TextField
                       label="EMAIL"
@@ -121,8 +153,8 @@ const Signup = props=>{
                   </div>
                   <br />
                   <br />
-                                
-                <div style={{position: 'relative', display: 'inline-block'}}>  
+
+                <div style={{position: 'relative', display: 'inline-block'}}>
                   <Lock style={{position: 'relative', left: 10, top: 15, width: 25, height: 35, marginRight: 30}}/>
                     <TextField
                       label="PASSWORD"
@@ -150,7 +182,7 @@ const Signup = props=>{
 
                       <br/>
                       <br />
-            <div style={{position: 'relative', display: 'inline-block'}}>  
+            <div style={{position: 'relative', display: 'inline-block'}}>
                   <Phone style={{position: 'relative', left: 10, top: 15, width: 25, height: 35, marginRight: 30}}/>
                   <TextField
                       label="MOBILE NUMBER"
@@ -168,7 +200,7 @@ const Signup = props=>{
                       onChange = {onChange}
                     />
 
-                    <br/> 
+                    <br/>
                     <br />
                 </div>
                   </CardBody>

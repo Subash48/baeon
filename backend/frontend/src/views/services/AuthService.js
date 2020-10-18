@@ -155,14 +155,7 @@
         }).then(async res => {
             if(res.status !== 401)
             {
-
                 return res.json().then(data => data);
-                //     document.cookie = `token=${datatoken}`
-
-                //      data
-                //const data = await res.json();
-                //document.cookie = `email=${data.user};
-                //cookies.set('token', data.token, { path: '/' });
 
             }
             else
@@ -204,10 +197,25 @@
                 .then(res => res.json())
                 .then(data => data);
     },
+
+    forgot: user =>{
+
+      return fetch('/user/forgot',{
+          method : "post",
+          body: JSON.stringify(user),
+          headers : {
+              'Content-Type' : 'application/json'
+          }
+        })
+        .then(res => res.json())
+        .then(data => data);
+
+
+
+    },
     isAuthenticated : ()=>{
         return fetch('/user/authenticated')
                 .then(res=>{
-                    //console.log(res);
                     if(res.status !== 401)
                         return res.json().then(data => data);
                     else

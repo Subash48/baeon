@@ -10,7 +10,8 @@ import ProfilePage from "./views/ProfilePage/ProfilePage.js";
 import SignUp from "./views/LoginPage/SignUp.js";
 import SignIn from "./views/LandingPage/SignIn.js";
 import AddMerchant from "./views/LandingPage/AddMerchant.js";
-import ChangePassword from "./views/LandingPage/ChangePassword.js";
+import ForgotPassword from "./views/LandingPage/forgotPassword.js";
+import Reset from "./views/LandingPage/reset.js";
 import apikey from "./views/LandingPage/apikey.js";
 import contact from "./views/LandingPage/contact.js";
 import admedia from "./views/LandingPage/admedia.js";
@@ -49,7 +50,8 @@ ReactDOM.render(
       <Route path="/contact" component={ contact } />
       <Route path="/apikey" component={ apikey } />
       <Route path="/AddMerchant"  component={ AddMerchant } />
-      <Route path="/ChangePassword" component={ ChangePassword } />
+      <Route path="/forgotPassword" component={ ForgotPassword } />
+      <Route path="/reset" component={ Reset } />
       <Route path="/profile" component={ProfilePage} />
       <Route path="/SignUp" component={ SignUp } />
       <Route path="/SignIn" component= { SignIn} />

@@ -31,7 +31,7 @@ const UserSchema = new mongoose.Schema({
             mobileno : {
                 type: String,
                 required: true,
-                maxlength : 10,
+                maxlength : 12,
                 trim :true
             },
             password: {

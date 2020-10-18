@@ -1,8 +1,9 @@
-import React, { useState,useContext } from 'react';
-// @material-ui/core components
+import React, { useState } from 'react';
 import { makeStyles } from "@material-ui/core/styles";
+// @material-ui/icons
 import Email from "@material-ui/icons/Email";
 import Lock from "@material-ui/icons/Lock";
+import axios from 'axios';
 // core components
 import Header from "components/Header/Header.js";
 import HeaderLinks from "components/Header/HeaderLinks.js";
@@ -14,63 +15,41 @@ import Card from "components/Card/Card.js";
 import CardBody from "components/Card/CardBody.js";
 import CardHeader from "components/Card/CardHeader.js";
 import CardFooter from "components/Card/CardFooter.js";
-import Message from "./Sections/Messages.js";
-
 import styles from "assets/jss/material-kit-react/views/loginPage.js";
 import AuthService from '../services/AuthService';
-import { AuthContext } from '../Context/AuthContext';
+import image from "./reset.JPG";
 import { TextField } from '@material-ui/core';
 
 const useStyles = makeStyles(styles);
 
 
-
-  const Signin = props=>{
+  const Reset = props=>{
     const [cardAnimaton, setCardAnimation] = React.useState("cardHidden");
   setTimeout(function() {
     setCardAnimation("");
   }, 700);
   const classes = useStyles();
   const { ...rest } = props;
-    const [user,setUser] = useState({username: "", password : ""});
-    const [message,setMessage] = useState("");
-    const authContext = useContext(AuthContext);
-
+    const [user,setUser] = useState({ password : "" , cpassword : ""});
+    const [ setMessage] = useState("");
     const onChange = e =>{
         setUser({...user,[e.target.name] : e.target.value});
     }
 
-
     const onSubmit = e =>{
-        e.preventDefault();
-        AuthService.login(user).then(data=>{
-          console.log('data');
-          console.log(authContext);
-            console.log(data);
-            const { isAuthenticated,user} = data;
-            if( isAuthenticated===true && user.role === "unverified")
-            {
-              setMessage('Please check your mail inbox and verify your account')
+       e.preventDefault();
 
-            }
-            else if(isAuthenticated===true && user.role==="merchant" ){
-                setMessage("Login successful ! Welcome back to BAEON")
-                authContext.setUser(user);
-                authContext.setIsAuthenticated(isAuthenticated);
-                console.log('set');
-                console.log(message);
-                props.history.push("/dash");
-            }
-            else if(isAuthenticated===true && user.role==="user"){
-              setMessage('Login successful ! Welcome back to BAEON')
+      console.log(props.match.params.token);
+       axios.post('/user/reset/'+ props.match.params.token.slice(1,) ,{
 
-              authContext.setUser(user);
-              authContext.setIsAuthenticated(isAuthenticated);
-              props.history.push("/AddMerchant");
-          }
-            else
-                setMessage('There was an error logging you in');
-        });
+           password : user.password
+       })
+       .then((res)=>{
+           console.log(res);
+       })
+       .catch((err)=>{
+           console.log(err);
+       })
     }
   return (
     <div>
@@ -84,78 +63,70 @@ const useStyles = makeStyles(styles);
       <div
         className={classes.pageHeader}
         style={{
-          backgroundImage: "url(https://i.pinimg.com/originals/36/f0/94/36f0949c623b61a235fd6645fa507236.jpg)",
+          backgroundImage: "url(" + image + ")",
           backgroundRepeat: "no-repeat",
-          backgroundPosition: "top center",
+          backgroundPosition: "center",
           backgroundSize: "cover"
         }}
       >
-        <br/>
-        <br/>
         <div className={classes.container}>
-
           <GridContainer justify="center">
-
             <GridItem xs={12} sm={12} md={4}>
-            {message !== ""? <Message message={message}/> : null}
-            <br /><br/>
               <Card className={classes[cardAnimaton]}>
-
                 <form onSubmit={onSubmit} className={classes.form}>
-                  <CardHeader  className={classes.cardHeader}>
-                    <h3> SIGN IN HERE!</h3>
+                  <CardHeader color="primary" className={classes.cardHeader}>
+                    <h4> Reset password ?</h4>
                   </CardHeader>
                   <p className={classes.divider}>  </p>
                   <CardBody>
 
                 <div style={{position: 'relative', display: 'inline-block'}}>
-                  <Email style={{position: 'relative', left: 10, top: 15, width: 25, height: 35, marginRight: 25}}/>
-
+                  <Lock style={{position: 'relative', left: 10, top: 15, width: 25, height: 35, marginRight: 25}}/>
                     <TextField
-                      label="EMAIL"
-                      id="email"
-                      name="username"
-                      style = {{width: "230px"}}
-                      onChange={onChange}
-                      formControlProps={{
-                        fullWidth: true
-                      }}
-                      inputProps={{
-                        type: "email",
-                      }}
-                    />
-                    </div>
-
-                      <br/>
-                      <br/>
-                <div style={{position: 'relative', display: 'inline-block'}}>
-                  <Lock style={{position: 'relative', left: 10, top: 15, width: 25, height: 35, marginRight: 25 }}/>
-                    <TextField
-                      label="PASSWORD"
+                      label="NEW PASSWORD"
                       id="pass"
                       name="password"
-                      style = {{width: "230px"}}
+                      onChange={onChange}
                       formControlProps={{
                         fullWidth: true
                       }}
-                      onChange={onChange}
                       inputProps={{
                         type: "password",
                         autoComplete: "off"
                       }}
                     />
                   </div>
+
+                  <br/>
+                      <br/>
+
+                  <div style={{position: 'relative', display: 'inline-block'}}>
+                  <Lock style={{position: 'relative', left: 10, top: 15, width: 25, height: 35, marginRight: 25}}/>
+                    <TextField
+                      label="RETYPE PASSWORD"
+                      id="pass1"
+                      name="cpassword"
+                      onChange={onChange}
+                      formControlProps={{
+                        fullWidth: true
+                      }}
+                      inputProps={{
+                        type: "password",
+                        autoComplete: "off"
+                      }}
+                    />
+                  </div>
+
+
                   </CardBody>
                   <CardFooter className={classes.cardFooter}>
-                    <Button type="submit" simple color="transparent" size="lg">
-                      LOGIN
+                    <Button type="submit" simple color="primary" size="lg">
+                      Reset Password
                     </Button>
                   </CardFooter>
                 </form>
               </Card>
-
             </GridItem>
-
           </GridContainer>
         </div>
         <Footer whiteFont />
@@ -163,4 +134,4 @@ const useStyles = makeStyles(styles);
     </div>
   );
 }
-export default Signin;
+export default Reset;

@@ -13,7 +13,7 @@ const getStyle = (props)=>{
 const Message = props=>{
     return(
         <div className={getStyle(props)} role="alert">
-            {props.message.msgBody}
+          <h3>{props.message}</ h3>
         </div>
     )
 }

@@ -29,12 +29,12 @@ const signToken = userID =>{
 userRouter.post('/register',async (req,res)=>{
     const hashedPassword = await bcrypt.hash(req.body.password,10);
 
-    crypto.randomBytes(10,(err,buffer)=>{
-            if(err){
+    //crypto.randomBytes(10,(err,buffer)=>{
+    //        if(err){
                 //console.log(err)
-                res.status(500).json({ error : err });
-            }
-        const token = buffer.toString("hex")
+    //            res.status(500).json({ error : err });
+    //      }
+    //    const token = buffer.toString("hex")
 
         const newUser = new User({
             username : req.body.username,
@@ -44,37 +44,38 @@ userRouter.post('/register',async (req,res)=>{
             role     : "user",
             emailVerified : true,
             phoneVerified : false,
-            resetPasswordToken : token,
-            resetPasswordExpires : Date.now() + 3600000,
+            // resetPasswordToken : token,
+            // resetPasswordExpires : Date.now() + 3600000,
             creationTime : new Date(),
             loginTime    : new Date()
 
         });
         newUser.save().then((result)=>{
 
-            const msg = {
-                to: req.body.email,
-                from: 'contact@baeon.co',
-                subject: 'BAEON Account Creation',
-                text: 'Congratulations !' +'\n\n'+ 'You have successfully created an account at baeon\n'+
-                      'Please click on the following link, or paste this into your browser to complete your email verification:\n\n' +
-                      'http://localhost:3000/verify/' + result.resetPasswordToken + '\n\n' +
-                      'We are excited to have you onboard with us.\n'                  };
-                sgMail.send(msg)
-                    .then(() =>{
+            // const msg = {
+            //     to: req.body.email,
+            //     from: 'contact@baeon.co',
+            //     subject: 'BAEON Account Creation',
+            //     text: 'Congratulations !' +'\n\n'+ 'You have successfully created an account at baeon\n'+
+            //           'Please click on the following link, or paste this into your browser to complete your email verification:\n\n' +
+            //           'http://localhost:3000/verify/' + result.resetPasswordToken + '\n\n' +
+            //           'We are excited to have you onboard with us.\n'                  };
+                // sgMail.send(msg)
+                //     .then(() =>{
 
-                        res.status(201).json({ msg : 'User added successfully' } );
+                        res.status(201).json({ status : 201,  msg : 'User added successfully' } );
                                })
-                    .catch((err)=>{
-                        res.status(400).json({error : 'There was an error sending the email !'})
-                              })
+                    // .catch((err)=>{
+                    //     res.status(400).json({error : 'There was an error sending the email !'})
+                    //           })
 
 
+              //  })
+            .catch((err) => {
+            console.log(err);
+            res.status(422).json({ status : 422, msg : 'There was an error creating your account'})
                 })
-            .catch(() => {
-            res.status(422).json({ error : 'There was an error creating your account'})
-                })
-            })
+            //})
     });
 
 
@@ -88,65 +89,66 @@ userRouter.post('/login',passport.authenticate('local',{session : false}),(req,r
     if(req.isAuthenticated()){
        const { _id,email,role,emailVerified } = req.user;
        const user = req.user;
+      console.log('here');
        console.log(emailVerified);
-       if(emailVerified === false)
-       {
-
-         crypto.randomBytes(10,(err,buffer)=>{
-                 if(err){
-                     //console.log(err)
-                     res.status(500).json({ error : err });
-                 }
-         const token = buffer.toString("hex")
-         const msg = {
-             to:  email,
-             from: 'contact@baeon.co',
-             subject: 'BAEON Account Creation',
-             text: 'Congratulations !' +'\n\n'+ 'You have successfully created an account at baeon\n'+
-                   'Please click on the following link, or paste this into your browser to complete your email verification:\n\n' +
-                   'http://localhost:3000/verify/' + token + '\n\n' +
-                   'We are excited to have you onboard with us.\n'
-                             };
-
-          User.findOne({ email : req.user.email })
-          .then((user) =>{
-           user.resetPasswordToken = token;
-           user.resetPasswordExpires = Date.now() + 3600000;
-           user.save().then((saveduser)=>{
-
-             sgMail.send(msg)
-                 .then(() =>{
-                     let role = "unverified";
-                     res.status(201).json({ isAuthenticated : true , user : { email ,role} } );
-                            })
-                 .catch((err)=>{
-                     res.status(400).json({error : 'There was an error sending the email associated with your account!' + err})
-                           })
-
-             }).catch((err) => {
-             console.log(err);
-             res.status(422).json({ error : 'Unable to login'});
-           }).catch((err) => {
-           console.log(err);
-           res.status(422).json({ error : 'Unable to login'});
-
-           })
-         }).catch((err) => {
-         console.log(err);
-         res.status(422).json({ error : 'Unable to login'});
-
-         })
-       })
-
-     }
-       else {
+     //   if(emailVerified === false)
+     //   {
+     //
+     //     crypto.randomBytes(10,(err,buffer)=>{
+     //             if(err){
+     //                 //console.log(err)
+     //                 res.status(500).json({ error : err });
+     //             }
+     //     const token = buffer.toString("hex")
+     //     const msg = {
+     //         to:  email,
+     //         from: 'contact@baeon.co',
+     //         subject: 'BAEON Account Creation',
+     //         text: 'Congratulations !' +'\n\n'+ 'You have successfully created an account at baeon\n'+
+     //               'Please click on the following link, or paste this into your browser to complete your email verification:\n\n' +
+     //               'http://localhost:3000/verify/' + token + '\n\n' +
+     //               'We are excited to have you onboard with us.\n'
+     //                         };
+     //
+     //      User.findOne({ email : req.user.email })
+     //      .then((user) =>{
+     //       user.resetPasswordToken = token;
+     //       user.resetPasswordExpires = Date.now() + 3600000;
+     //       user.save().then((saveduser)=>{
+     //
+     //         sgMail.send(msg)
+     //             .then(() =>{
+     //                 let role = "unverified";
+     //                 res.status(201).json({ isAuthenticated : true , user : { email ,role} } );
+     //                        })
+     //             .catch((err)=>{
+     //                 res.status(400).json({error : 'There was an error sending the email associated with your account!' + err})
+     //                       })
+     //
+     //         }).catch((err) => {
+     //         console.log(err);
+     //         res.status(422).json({ error : 'Unable to login'});
+     //       }).catch((err) => {
+     //       console.log(err);
+     //       res.status(422).json({ error : 'Unable to login'});
+     //
+     //       })
+     //     }).catch((err) => {
+     //     console.log(err);
+     //     res.status(422).json({ error : 'Unable to login'});
+     //
+     //     })
+     //   })
+     //
+     // }
+    //   else {
 
        const token = signToken(_id);
        res.cookie('access_token',token,{httpOnly: true, sameSite:true});
        //res.cookie('access_token', token, { maxAge: 900000, httpOnly: true });
        //res.cookie('access_token',token,{httpOnly: true, SameSite:true });//,expire: 360000 + Date.now() });
        res.status(200).json({isAuthenticated : true,user : { email,role }});
-     }
+     //}
     }
     else
     {
@@ -193,9 +195,6 @@ userRouter.get('/verify/:token', function(req, res) {
 // @method      :   Post
 // @params      :   email
 // @note        :   The mail is sent via the emailid in line 25 of this file
-                    /* In case of changing sender email, in the gmail account settings
-                    allow permission for access to less secure apps )
-                    https://itnext.io/password-reset-emails-in-your-react-app-made-easy-with-nodemailer-bb27968310d7  */
 
 userRouter.post('/forgot', function(req, res, next) {
 
@@ -208,7 +207,7 @@ userRouter.post('/forgot', function(req, res, next) {
         User.findOne({email:req.body.email})
         .then(user=>{
             if(!user){
-                return res.status(422).json({error:"User dont exists with that email"})
+                return res.status(422).json({message:"User with this email does not exist !"})
             }
             user.resetPasswordToken = token
             user.resetPasswordExpires = Date.now() + 3600000
@@ -227,7 +226,7 @@ userRouter.post('/forgot', function(req, res, next) {
                       res.json({message: "An email with link to reset password has been sent !"})
                   })
                   .catch((err)=>{
-                      res.status(400).json({error : 'There was an error sending the email !'})
+                      res.status(400).json({message : 'There was an error sending the email !'})
                   })
         })
 
@@ -273,7 +272,7 @@ userRouter.post('/reset/:token', function(req, res) {
 userRouter.get('/logout',passport.authenticate('jwt',{session : false}),(req,res)=>{
     res.clearCookie('access_token');
 
-    res.status(200).json({isAuthenticated : true,user : { email : "",role : "loggedout" }});
+    res.status(200).json({isAuthenticated : true,user : { email : "",role : "" }});
 });
 
 

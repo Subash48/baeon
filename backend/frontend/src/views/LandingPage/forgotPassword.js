@@ -18,35 +18,30 @@ import styles from "assets/jss/material-kit-react/views/loginPage.js";
 import AuthService from '../services/AuthService';
 import image from "./reset.JPG";
 import { TextField } from '@material-ui/core';
+import Message from "./Sections/Messages.js";
 
 const useStyles = makeStyles(styles);
 
-  
-  const Signin = props=>{
+
+  const ForgotPassword = props=>{
     const [cardAnimaton, setCardAnimation] = React.useState("cardHidden");
   setTimeout(function() {
     setCardAnimation("");
   }, 700);
   const classes = useStyles();
   const { ...rest } = props;
-    const [user,setUser] = useState({username: "", password : ""});
-    const [ setMessage] = useState(null);
+    const [user,setUser] = useState({email: ""});
+    const [ message,setMessage] = useState("");
     const onChange = e =>{
         setUser({...user,[e.target.name] : e.target.value});
     }
 
     const onSubmit = e =>{
         e.preventDefault();
-        AuthService.login(user).then(data=>{
+        AuthService.forgot(user).then(data=>{
             console.log(data);
-            const { isAuthenticated,message} = data;
-            if(isAuthenticated){
-                // authContext.setUser(user);
-                // authContext.setIsAuthenticated(isAuthenticated);
-                props.history.push("/afterlog");
-            }
-            else
-                setMessage(message);
+            const { message} = data;
+            setMessage(message);
         });
     }
   return (
@@ -77,14 +72,14 @@ const useStyles = makeStyles(styles);
                   </CardHeader>
                   <p className={classes.divider}>  </p>
                   <CardBody>
-                   
-                <div style={{position: 'relative', display: 'inline-block'}}>  
+
+                <div style={{position: 'relative', display: 'inline-block'}}>
                   <Email style={{position: 'relative', left: 10, top: 15, width: 25, height: 35, marginRight: 25}}/>
-                  
+
                     <TextField
                       label="EMAIL ID"
                       id="email"
-                      name="username"
+                      name="email"
                       onChange={onChange}
                       formControlProps={{
                         fullWidth: true
@@ -97,48 +92,11 @@ const useStyles = makeStyles(styles);
 
                       <br/>
                       <br/>
-                <div style={{position: 'relative', display: 'inline-block'}}>  
-                  <Lock style={{position: 'relative', left: 10, top: 15, width: 25, height: 35, marginRight: 25}}/>
-                    <TextField
-                      label="NEW PASSWORD"
-                      id="pass"
-                      name="password"
-                      onChange={onChange}
-                      formControlProps={{
-                        fullWidth: true
-                      }}
-                      inputProps={{
-                        type: "password",
-                        autoComplete: "off"
-                      }}
-                    />
-                  </div>
-
-                  <br/>
-                      <br/>
-
-                  <div style={{position: 'relative', display: 'inline-block'}}>  
-                  <Lock style={{position: 'relative', left: 10, top: 15, width: 25, height: 35, marginRight: 25}}/>
-                    <TextField
-                      label="RETYPE PASSWORD"
-                      id="pass1"
-                      name="password1"
-                      onChange={onChange}
-                      formControlProps={{
-                        fullWidth: true
-                      }}
-                      inputProps={{
-                        type: "password",
-                        autoComplete: "off"
-                      }}
-                    />
-                  </div>
-
 
                   </CardBody>
                   <CardFooter className={classes.cardFooter}>
                     <Button type="submit" simple color="primary" size="lg">
-                      Reset Password
+                      Send Password Reset Link
                     </Button>
                   </CardFooter>
                 </form>
@@ -151,4 +109,4 @@ const useStyles = makeStyles(styles);
     </div>
   );
 }
-export default Signin;
+export default ForgotPassword;
