@@ -84,6 +84,9 @@ const couponSchema = new mongoose.Schema({
             },
             startDate : {
                 type : String
+            },
+            status: {
+              type: String
             }
         },
     {

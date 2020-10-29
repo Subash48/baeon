@@ -39,34 +39,34 @@ const useStyles = makeStyles(styles);
 let s = 0;
 
 /*jshint esversion: 6 */
-const paymentHandler = async (e) => {
-  const API_URL = 'http://localhost:5000/'
-  e.preventDefault();
-  const orderUrl = 'http://localhost:5000/api/order'
-  const response = await axios.post(orderUrl,{
-    amount : 100
-  });
-  const { data } = response;
-  const options = {
-    key: 'rzp_test_KNoCu64wQKXO55',
-    name: "BAEON",
-    description: "We find the best discounts for you",
-    order_id: data.id,
-    handler: async (response) => {
-      try {
-       const paymentId = response.razorpay_payment_id;
-       const url = `${API_URL}api/capture/${paymentId}`;
-       const captureResponse = await axios.post(url, {})
-       console.log(captureResponse.data);
-      } catch (err) {
-        console.log(err);
-      }
-    },  theme: {
-      color: "#686CFD",
-    },
-  };
-  const rzp1 = new window.Razorpay(options);
-  rzp1.open();};
+// const paymentHandler = async (e) => {
+//   const API_URL = '/'
+//   e.preventDefault();
+//   const orderUrl = '/api/order'
+//   const response = await axios.post(orderUrl,{
+//     amount : 100
+//   });
+//   const { data } = response;
+//   const options = {
+//     key: 'rzp_test_KNoCu64wQKXO55',
+//     name: "BAEON",
+//     description: "We find the best discounts for you",
+//     order_id: data.id,
+//     handler: async (response) => {
+//       try {
+//        const paymentId = response.razorpay_payment_id;
+//        const url = `${API_URL}api/capture/${paymentId}`;
+//        const captureResponse = await axios.post(url, {})
+//        console.log(captureResponse.data);
+//       } catch (err) {
+//         console.log(err);
+//       }
+//     },  theme: {
+//       color: "#686CFD",
+//     },
+//   };
+//   const rzp1 = new window.Razorpay(options);
+//   rzp1.open();};
 
 
 const data = [
@@ -263,12 +263,6 @@ export default function WorkSection(props) {
    });
 
   const compute = (pro) =>{
-      //console.group('Price');
-      //console.log(coupon);
-      // if(pro !== undefined)
-      // {
-      //   setPrice(...price,{ productPrice : pro});
-      // }
       var couponValue=0;
       console.log('select'+s);
       console.log('Value check');
@@ -276,23 +270,12 @@ export default function WorkSection(props) {
       {
         couponValue = coupon.offerValue;
       }
-    //   else if(pro === undefined)
-    //   {
-    //   couponValue  = Number((coupon.offerValue*price.productPrice)/100);
-    //   console.log('%'+coupon.offerValue);
-    //   console.log('rad'+coupon.radius)
-    // }
+
       else {
       couponValue =  Number((coupon.offerValue*price.productPrice)/100);
 
       }
-      //console.log(coupon);
-      console.log('inside');
-      // console.log(pro);
-      // console.log(price.productPrice);
-      // console.log(couponValue);
-      //console.log(couponValue);
-      //console.log(couponValue);
+
       var calcPrice =0;
       calcPrice = Number(couponValue*coupon.couponNumber/100 + (couponValue*coupon.couponNumber/10) + (coupon.radius/1000)*((couponValue*2.5*coupon.couponNumber)/100) );
       console.log(calcPrice);
@@ -301,25 +284,55 @@ export default function WorkSection(props) {
       let merc = [];
       merchs.forEach((merch)=>{
 
-      // if(pro === undefined)
-      // {
+
         merch.amount = Number((Number(merch.basePrice * price.productPrice * coupon.couponNumber)/100) + calcPrice);
-      //
-      // }
-      // else
-      //  {
-      //    merch.amount = Number((Number(merch.basePrice * pro *coupon.couponNumber)/100)+calcPrice);
-      //   }
         merc.push(merch)
 
        //console.log(merch);
        });
        setMerchants(merc);
        console.log(merc);
+       //setCoupon(...coupon,{ amount : 1});
 
   }
 
-
+  const paymentHandler = async (e) => {
+    compute();
+    console.log('here');
+    console.log(merchants[s].id);
+    const API_URL = '/'
+    e.preventDefault();
+    const orderUrl = '/api/order'
+    const response = await axios.post(orderUrl,{
+      merchant : merchants[s].id,
+      amount : merchants[s].amount,
+      coupon : coupon
+    }, { headers: {
+    'content-type': 'application/json'
+  }});
+    const { data } = response;
+    console.log(data);
+    const options = {
+      key: 'rzp_test_KNoCu64wQKXO55',
+      name: "BAEON",
+      description: "We find the best discounts for you",
+      order_id: data.id,
+      handler: async (response) => {
+        try {
+         const paymentId = response.razorpay_payment_id;
+         const url = `${API_URL}api/capture/${paymentId}`;
+         const captureResponse = await axios.post(url, {      amount : merchants[s].amount
+         });
+         console.log(captureResponse.data);
+        } catch (err) {
+          console.log(err);
+        }
+      },  theme: {
+        color: "#686CFD",
+      },
+    };
+    const rzp1 = new window.Razorpay(options);
+    rzp1.open();};
 
   const onSubmit = e =>{
     console.log(e);

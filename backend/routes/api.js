@@ -22,7 +22,7 @@ sgMail.setApiKey('SG.edLZoilgTQmDMjL2k2RUbg.cMUazK1AdFdA11KyhuCaN952iABHN11aQo1T
 let instance = new Razorpay({
     key_id: key.RAZOR_KEY,
     key_secret: key.RAZOR_SECRET
-  })
+  });
 
 
 
@@ -470,98 +470,98 @@ apiRouter.get('/getProductsByApi',(req,res)=>{
 //}).catch((err) => console.log(err));
 })
 
-apiRouter.post('/addPromotion',upload.single('couponImage'),(req,res)=>{
-
-    User.findOne({apikey : req.body.apikey })
-    .then((users)=>{
-
-    Merchant.findOne({ email : users.email })
-    .then(async (user)=>{
-
-    console.log(req.body.amount);
-    if(!req.body.couponTitle)
-    {
-        res.json({  error : "Title for coupon field is missing "})
-    }
-    else if(!req.body.noOfCoupons)
-    {
-        res.json({  error : "Number of coupons field is missing "})
-    }
-    else if(!req.body.amount)
-    {
-        res.json({  error : "Amount field is missing "})
-    }
-    else if(!req.body.products)
-    {
-        res.json({ error : 'No product has been selected'})
-    }
-    else if(!req.body.merchants)
-    {
-        res.json({ error : 'No merchant has been selected'})
-    }
-    else
-    {
-    const promoCodes = [];
-    const id = await Math.random().toString(36).substring(7).toUpperCase();
-    console.log("random", id);
-    for(let i = 0 ; i< Number(req.body.noOfCoupons);i++)
-    {
-
-        let code ={
-            'promoCode' : String(id+i),
-            'used'    : false
-        };
-        promoCodes.push(code);
-    }
-    console.log(req.body.All);
-    const newPromotion = new Coupon({
-        "merchantId" : user._id,
-        // "productId"  : req.body.productId,
-        "couponTitle" : req.body.couponTitle,
-        "couponDescription" : req.body.couponDescription,
-        "noOfCoupons": req.body.noOfCoupons,
-        "isPercent"  : req.body.isPercent === "Discount" ? true :false,
-        "amount"     : req.body.amount,
-        "expireDate" :  req.body.expireDate === undefined ? '' : req.body.expireDate,
-        "radius"     : req.body.radius,
-        "lat"        : user.lat,
-        "long"       : user.long,
-        "couponImage"  :req.file == undefined ? '': req.file.path ,
-        "isActive"   : true,
-        "startDate"  : "YYYY-MM-DD",
-        "promoCodes" : promoCodes,
-        "couponUsed" : 0,
-        "products"  : req.body.products,//Number(req.body.All) === 1? ["All"] : req.body.products,
-        "merchants" : req.body.merchants,
-        "businessName" : user.businessName,
-        "code"         : id,
-    });
-
-    newPromotion.save()
-    .then((data)=>
-    {
-        let params = {
-            amount : req.body.price,
-            currency: "INR",
-            receipt: "su001",
-            payment_capture: '1'
-          };
-        instance.orders.create(params).then((data) => {
-                res.send({"sub":data,"status":"success"});
-                //res.render('payment.ejs',{ sub  : data })
-        }).catch((error) => {
-                res.send({"sub":error,"status":"failed"});
-        })
-    //res.status(201).json({ msg : 'Promotion details added successfully' } ))
-    })
-    .catch((err)=> res.status(422).json({ msg : 'There was an error in the promotion details'+err }))
-    }})
-    .catch((err)=> res.json({ error : err.message }));
-
-
-
-}).catch((err)=> console.log(err));
-});
+// apiRouter.post('/addPromotion',upload.single('couponImage'),(req,res)=>{
+//
+//     User.findOne({apikey : req.body.apikey })
+//     .then((users)=>{
+//
+//     Merchant.findOne({ email : users.email })
+//     .then(async (user)=>{
+//
+//     console.log(req.body.amount);
+//     if(!req.body.couponTitle)
+//     {
+//         res.json({  error : "Title for coupon field is missing "})
+//     }
+//     else if(!req.body.noOfCoupons)
+//     {
+//         res.json({  error : "Number of coupons field is missing "})
+//     }
+//     else if(!req.body.amount)
+//     {
+//         res.json({  error : "Amount field is missing "})
+//     }
+//     else if(!req.body.products)
+//     {
+//         res.json({ error : 'No product has been selected'})
+//     }
+//     else if(!req.body.merchants)
+//     {
+//         res.json({ error : 'No merchant has been selected'})
+//     }
+//     else
+//     {
+//     const promoCodes = [];
+//     const id = await Math.random().toString(36).substring(7).toUpperCase();
+//     console.log("random", id);
+//     for(let i = 0 ; i< Number(req.body.noOfCoupons);i++)
+//     {
+//
+//         let code ={
+//             'promoCode' : String(id+i),
+//             'used'    : false
+//         };
+//         promoCodes.push(code);
+//     }
+//     console.log(req.body.All);
+//     const newPromotion = new Coupon({
+//         "merchantId" : user._id,
+//         // "productId"  : req.body.productId,
+//         "couponTitle" : req.body.couponTitle,
+//         "couponDescription" : req.body.couponDescription,
+//         "noOfCoupons": req.body.noOfCoupons,
+//         "isPercent"  : req.body.isPercent === "Discount" ? true :false,
+//         "amount"     : req.body.amount,
+//         "expireDate" :  req.body.expireDate === undefined ? '' : req.body.expireDate,
+//         "radius"     : req.body.radius,
+//         "lat"        : user.lat,
+//         "long"       : user.long,
+//         "couponImage"  :req.file == undefined ? '': req.file.path ,
+//         "isActive"   : true,
+//         "startDate"  : "YYYY-MM-DD",
+//         "promoCodes" : promoCodes,
+//         "couponUsed" : 0,
+//         "products"  : req.body.products,//Number(req.body.All) === 1? ["All"] : req.body.products,
+//         "merchants" : req.body.merchants,
+//         "businessName" : user.businessName,
+//         "code"         : id,
+//     });
+//
+//     newPromotion.save()
+//     .then((data)=>
+//     {
+//         let params = {
+//             amount : req.body.price,
+//             currency: "INR",
+//             receipt: "su001",
+//             payment_capture: '1'
+//           };
+//         instance.orders.create(params).then((data) => {
+//                 res.send({"sub":data,"status":"success"});
+//                 //res.render('payment.ejs',{ sub  : data })
+//         }).catch((error) => {
+//                 res.send({"sub":error,"status":"failed"});
+//         })
+//     //res.status(201).json({ msg : 'Promotion details added successfully' } ))
+//     })
+//     .catch((err)=> res.status(422).json({ msg : 'There was an error in the promotion details'+err }))
+//     }})
+//     .catch((err)=> res.json({ error : err.message }));
+//
+//
+//
+// }).catch((err)=> console.log(err));
+// });
 
 
 apiRouter.post('/displayCoupons',passport.authenticate('headerapikey',{ session : false , failureRedirect : '/api/unauthorized'}),(req,res)=>{
@@ -804,38 +804,41 @@ sgMail.send(msg)
 });
 
 
-
-apiRouter.post("/order", (req, res) => {
-    try {
-    console.log(req.body.amount);
-    const options = {
-      amount: req.body.amount*100, // amount == Rs 10
-      currency: "INR",
-      receipt: "receipt#1",
-      payment_capture: 0,
- // 1 for automatic capture // 0 for manual capture
- };  instance.orders.create(options, async function (err, order) {
-      if (err) {
-      return res.status(500).json({
-        message: "Something Went Wrong",
-      });
-    }
-  return res.status(200).json(order);
- });} catch (err) {
-  return res.status(500).json({
-    message: "Something Went Wrong",
-  });
- }
-});
+//
+// apiRouter.post("/order", (req, res) => {
+//     try {
+//     console.log(req.body);
+//     const options = {
+//       amount: req.body.amount*100, // amount == Rs 10
+//       currency: "INR",
+//       receipt: "receipt#1",
+//       payment_capture: 0,
+//  // 1 for automatic capture // 0 for manual capture
+//  };  instance.orders.create(options, async function (err, order) {
+//       if (err) {
+//       return res.status(500).json({
+//         message: "Something Went Wrong",
+//       });
+//     }
+//   return res.status(200).json(order);
+//  });} catch (err) {
+//    console.log(err);
+//   return res.status(500).json({
+//     message: "Something Went Wrong",
+//   });
+//  }
+// });
 
 apiRouter.post("/capture/:paymentId", (req, res) => {
     try {
+      console.log('capture');
+      console.log(req.body.amount);
  return request(
       {
     method: "POST",
     url: `https://${key.RAZOR_KEY}:${key.RAZOR_SECRET}@api.razorpay.com/v1/payments/${req.params.paymentId}/capture`,
     form: {
-       amount: 10 * 100, // amount == Rs 10 // Same As Order amount
+       amount: req.body.amount * 100, // amount == Rs 10 // Same As Order amount
        currency: "INR",
      },
    },
@@ -848,6 +851,7 @@ apiRouter.post("/capture/:paymentId", (req, res) => {
      console.log("Status:", response.statusCode);
      console.log("Headers:", JSON.stringify(response.headers));
      console.log("Response:", body);
+     
      return res.status(200).json(body);
     });
 } catch (err) {
@@ -1036,5 +1040,117 @@ apiRouter.patch('/product',passport.authenticate('headerapikey',{ session : fals
     })
     .catch((err) => res.json({ error : err.message}));
  });
+
+
+
+
+ /* Coupon related API endpoints*/
+ apiRouter.post("/order", (req, res) => {
+
+
+  User.findOne({ email : "crescita2020@gmail.com" })
+  .then((users)=>{
+
+    Merchant.findOne({ email : users.email })
+      .then(async (user)=>{
+
+        console.log(req.body.amount);
+        if(!req.body.coupon.couponTitle)
+        {
+          res.staus(500).json({  error : "Title for coupon field is missing "})
+        }
+        else if(!req.body.coupon.couponNumber)
+        {
+          res.json({  error : "Number of coupons field is missing "})
+        }
+        else if(!req.body.amount)
+        {
+          res.json({  error : "Amount field is missing "})
+        }
+        else if(!req.body.coupon.product)
+        {
+          res.json({ error : 'No product has been selected'})
+        }
+        else if(!req.body.merchant)
+        {
+          res.json({ error : 'No merchant has been selected'})
+        }
+        else
+        {
+          const promoCodes = [];
+          const id = await Math.random().toString(36).substring(7).toUpperCase();
+          console.log("random", id);
+          for(let i = 0 ; i< Number(req.body.coupon.noOfCoupons);i++)
+          {
+
+            let code ={
+              'promoCode' : String(id+i),
+              'used'    : false
+            };
+            promoCodes.push(code);
+          }
+          console.log(req.body.All);
+          const newPromotion = new Coupon({
+            "merchantId" : user._id,
+            // "productId"  : req.body.productId,
+            "couponTitle" : req.body.coupon.couponTitle,
+            "couponDescription" : req.body.coupon.couponDescription,
+            "noOfCoupons": req.body.coupon.couponNumber,
+            "isPercent"  : req.body.coupon.isPercent === "Discount" ? true :false,
+            "amount"     : req.body.amount,
+            //"expireDate" :  req.body.coupon.expireDate === undefined ? '' : req.body.expireDate,
+            "radius"     : req.body.coupon.radius,
+            "lat"        : user.lat,
+            "long"       : user.long,
+            //"couponImage"  :req.file == undefined ? '': req.file.path ,
+            "isActive"   : true,
+            "startDate"  : "YYYY-MM-DD",
+            "promoCodes" : promoCodes,
+            "couponUsed" : 0,
+            "products"  : req.body.coupon.product,//Number(req.body.All) === 1? ["All"] : req.body.products,
+            "merchants" : req.body.merchant,
+            "businessName" : user.businessName,
+            "code"         : id,
+            "status"     : "PAYMENT_INITIATED"
+          });
+
+    newPromotion.save()
+    .then((data)=>
+    {
+    try {
+        console.log(req.body);
+        const options = {
+        amount: req.body.amount*100, // amount == Rs 10
+        currency: "INR",
+        receipt: "receipt#1",
+        payment_capture: 0,
+        // 1 for automatic capture // 0 for manual capture
+                        };
+        instance.orders.create(options, async function (err, order) {
+          if (err) {
+              return res.status(500).json({
+                  message: "Something Went Wrong",
+                  });
+          }
+          console.log(order);
+          return res.status(200).json(order);
+        });
+      }
+      catch (err) {
+        console.log(err);
+        return res.status(500).json({
+          message: "Something Went Wrong",
+        });
+}
+ //res.status(201).json({ msg : 'Promotion details added successfully' } ))
+ })
+ .catch((err)=> res.status(500).json({ msg : 'There was an error in the promotion details'+err }))
+ }})
+ .catch((err)=> res.status(500).json({ error : err.message }));
+
+ }).
+ catch((err)=>  res.status(500).json({ error : err.message }));
+});
+
 
 module.exports = apiRouter;
