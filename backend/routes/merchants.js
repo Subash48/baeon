@@ -4,6 +4,7 @@ const passport = require('passport');
 const passportConfig = require('../config/passport');
 const Merchant = require('../models/merchantSchema');
 const Product = require('../models/productSchema');
+const Advertiser = require('../models/advertiserSchema');
 const Coupon = require('../models/couponSchema');
 const userSchema = require('../models/userSchema');
 const uuidAPIKey = require('uuid-apikey');
@@ -314,24 +315,20 @@ merchantRouter.get('/getProductsByApi',(req,res)=>{
                 unitPrice : pro.unitPrice
             }));
             });
-            Merchant.find({}).then(async (merch)=>{
+            Advertiser.find({}).then(async (adv)=>{
 
-                let merchantDisplay = [];
-                merch.forEach((merchOne)=>{
-                    if(merchOne.email != "crescita2020@gmail.com")
-                    {
-                        merchantDisplay.push({
-                            "businessName" :merchOne.businessName,
-                            "id" : merchOne._id,
-                            "basePrice" : merchOne.basePrice,
-                            "baseType"  : merchOne.baseType,
-                            "baseReturn" : merchOne.baseReturn,
-                            "amount" : 0
+                let advDisplay = [];
+                adv.forEach((advOne)=>{
+
+                        advDisplay.push({
+                            "businessName" :advOne.businessName,
+                            "id" : advOne._id,
+                            "amount" : advOne.basePrice,
                         })
-                    }
+
                 });
                 console.log(product);
-                res.json({ products : product,  merchants : merchantDisplay , lat : users.lat , long : users.long } );
+                res.json({ products : product,  advertisers : advDisplay , lat : users.lat , long : users.long } );
 
             }).catch((err) => console.log(err))
 
@@ -341,31 +338,31 @@ merchantRouter.get('/getProductsByApi',(req,res)=>{
 })
 
 
-merchantRouter.get('/getMerchants',(req,res)=>{
-
-    User.findOne({apikey : req.query.apikey })
-    .then((user)=>{
-    // Merchant.findOne({ email : user.email })
-    // .then((users)=>{
-
-
-        Merchant.find({}).then(async (merch)=>{
-
-            let merchantDisplay = [];
-            merch.forEach((merchOne)=>{
-                if(merchOne.email != user.email)
-                {
-                    merchantDisplay.push({
-                        "businessName" :merchOne.businessName,
-                        "id" : merchOne._id,
-                        "basePrice" : merchOne.basePrice
-                    })
-                }
-            });
-            res.json({ merchant : merchantDisplay });
-        }).catch((err) => console.log(err))
-
-}).catch((err) => console.log(err))
-});
+// merchantRouter.get('/getMerchants',(req,res)=>{
+//
+//     User.findOne({apikey : req.query.apikey })
+//     .then((user)=>{
+//     // Merchant.findOne({ email : user.email })
+//     // .then((users)=>{
+//
+//
+//         Merchant.find({}).then(async (merch)=>{
+//
+//             let merchantDisplay = [];
+//             merch.forEach((merchOne)=>{
+//                 if(merchOne.email != user.email)
+//                 {
+//                     merchantDisplay.push({
+//                         "businessName" :merchOne.businessName,
+//                         "id" : merchOne._id,
+//                         "basePrice" : merchOne.basePrice
+//                     })
+//                 }
+//             });
+//             res.json({ merchant : merchantDisplay });
+//         }).catch((err) => console.log(err))
+//
+// }).catch((err) => console.log(err))
+// });
 
 module.exports = merchantRouter;

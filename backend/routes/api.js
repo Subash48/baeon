@@ -5,6 +5,7 @@ const passportConfig = require('../config/passport');
 const Merchant = require('../models/merchantSchema');
 const Product = require('../models/productSchema');
 const Coupon = require('../models/couponSchema');
+const Advertiser= require('../models/advertiserSchema');
 const Stat = require('../models/statSchema');
 const key = require('../config/auth');
 const multer = require("multer");
@@ -851,7 +852,7 @@ apiRouter.post("/capture/:paymentId", (req, res) => {
      console.log("Status:", response.statusCode);
      console.log("Headers:", JSON.stringify(response.headers));
      console.log("Response:", body);
-     
+
      return res.status(200).json(body);
     });
 } catch (err) {
@@ -1151,6 +1152,8 @@ apiRouter.patch('/product',passport.authenticate('headerapikey',{ session : fals
  }).
  catch((err)=>  res.status(500).json({ error : err.message }));
 });
+
+
 
 
 module.exports = apiRouter;

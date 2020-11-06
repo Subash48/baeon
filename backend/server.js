@@ -29,7 +29,10 @@ const userRouter = require('./routes/users');
 app.use('/user',userRouter);
 
 const merchantRouter = require('./routes/merchants');
-app.use('/merchant',merchantRouter);
+app.use('/merchant',merchantRouter);    
+
+const advertiserRouter = require('./routes/advertisers');
+app.use('/advertiser',advertiserRouter);
 
 const apiRouter = require('./routes/api');
 app.use('/api',apiRouter);

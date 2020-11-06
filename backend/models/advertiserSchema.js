@@ -11,6 +11,10 @@ const advertiserSchema = new mongoose.Schema({
                 trim : true,
                 minlength : 3
             },
+            businessName :{
+                type: String,
+                required: true
+            },
             password: {
                 type: String,
                 required: true
@@ -29,4 +33,4 @@ const advertiserSchema = new mongoose.Schema({
         unique: 'true'
     });
 
-module.exports = mongoose.model('Merchant',merchantSchema);
+module.exports = mongoose.model('Advertiser',advertiserSchema);

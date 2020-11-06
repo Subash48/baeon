@@ -1,4 +1,4 @@
- 
+
 export default {
     getProducts : ()=>{
         return fetch('/merchant/getProduct',{
@@ -50,7 +50,26 @@ export default {
                 .then(response=>{
 
                         return response.json().then(data => data);
-                   
+
                 });
     },
+
+    computePrice : (details) =>{
+      return fetch('/advertiser/computePrice',{
+        method: "post",
+        body : JSON.stringify(details),
+        headers:{
+            'Content-Type' : 'application/json',
+        }
+    }).then(response=>{
+        //if(response.status !== 401){
+            //console.log(response.json())
+            console.log('here in service');
+            return response.json().then(data => data);
+        //}
+        //else
+        //    return { err : 'error message'};
+    });
+    }
+
 }

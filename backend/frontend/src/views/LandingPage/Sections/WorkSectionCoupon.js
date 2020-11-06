@@ -196,7 +196,7 @@ class SelectableCardList extends React.Component {
   }
 }
 
-class Merchants extends React.Component {
+class Advertisers extends React.Component {
 
   constructor(props){
     super(props);
@@ -244,7 +244,7 @@ export default function WorkSection(props) {
     });
 
     const [products,setProducts] = React.useState([]);
-    const [merchants,setMerchants] = React.useState([]);
+    const [advertisers,setAdvertisers] = React.useState([]);
     const [msg,setMsg] = React.useState("");
 
     const [coupon,setCoupon] = React.useState({
@@ -258,7 +258,7 @@ export default function WorkSection(props) {
       radius : 2000,
       lat : 13.067439,
       long : 80.237617,
-      merchant : "",
+      advertiser : "",
       amount : 0
    });
 
@@ -280,32 +280,32 @@ export default function WorkSection(props) {
       calcPrice = Number(couponValue*coupon.couponNumber/100 + (couponValue*coupon.couponNumber/10) + (coupon.radius/1000)*((couponValue*2.5*coupon.couponNumber)/100) );
       console.log(calcPrice);
       console.log( (couponValue*coupon.couponNumber/10) )
-      let merchs = merchants;
+      //let merchs = merchants;
       let merc = [];
-      merchs.forEach((merch)=>{
-
-
-        merch.amount = Number((Number(merch.basePrice * price.productPrice * coupon.couponNumber)/100) + calcPrice);
-        merc.push(merch)
-
-       //console.log(merch);
-       });
-       setMerchants(merc);
+      // merchs.forEach((merch)=>{
+      //
+      //
+      //   merch.amount = Number((Number(merch.basePrice * price.productPrice * coupon.couponNumber)/100) + calcPrice);
+      //   merc.push(merch)
+      //
+      //  //console.log(merch);
+      //  });
+      // setMerchants(merc);
        console.log(merc);
        //setCoupon(...coupon,{ amount : 1});
 
   }
 
   const paymentHandler = async (e) => {
-    compute();
+    //compute();
     console.log('here');
-    console.log(merchants[s].id);
+    console.log(advertisers[s].id);
     const API_URL = '/'
     e.preventDefault();
     const orderUrl = '/api/order'
     const response = await axios.post(orderUrl,{
-      merchant : merchants[s].id,
-      amount : merchants[s].amount,
+      advertiser : advertisers[s].id,
+      amount : advertisers[s].amount,
       coupon : coupon
     }, { headers: {
     'content-type': 'application/json'
@@ -321,7 +321,7 @@ export default function WorkSection(props) {
         try {
          const paymentId = response.razorpay_payment_id;
          const url = `${API_URL}api/capture/${paymentId}`;
-         const captureResponse = await axios.post(url, {      amount : merchants[s].amount
+         const captureResponse = await axios.post(url, {      amount : advertisers[s].amount
          });
          console.log(captureResponse.data);
         } catch (err) {
@@ -354,6 +354,24 @@ export default function WorkSection(props) {
     setCoupon({...coupon,[e.target.name] : e.target.value});
   };
 
+  const handleNos = e =>{
+
+    console.log(e);
+    setCoupon({...coupon,[e.target.name] : e.target.value});
+    let data= {
+      noOfCoupons : coupon.couponNo
+    };
+    ProductService.computePrice().then(data =>{
+        console.log('here');
+        setAdvertisers(data.advertisers);
+        console.log(data.advertisers);
+        console.log(coupon);
+                  //console.log(products);
+    })
+    .catch((err)=>{
+      console.log(err);
+    })
+  };
   const handleNo = e =>{
 
     console.log(e);
@@ -372,8 +390,8 @@ export default function WorkSection(props) {
           console.log('here');
           console.log(data);
           setProducts(data.products);
-          setMerchants(data.merchants);
-          console.log(data.merchants);
+          setAdvertisers(data.advertisers);
+          console.log(data.advertisers);
           setCoupon({ ...coupon,lat : data.lat  , long : data.long})
           console.log(coupon);
                     //console.log(products);
@@ -645,19 +663,17 @@ export default function WorkSection(props) {
     </form>
   </GridItem>
   <GridItem>
-               <center> <Button color="info" onClick= { compute }> Compute Price </Button> </center>
+               <center> <Button color="info" onClick= { handleNos }> Compute Price </Button> </center>
    </GridItem>
 </GridContainer>
 </div>
 
              <GridContainer justify="center">
-                 <Merchants title=" Pick Merchant Host !" cardContents={merchants}
+                 <Advertisers title=" Pick Advertiser Host !" cardContents={advertisers}
                 />
              </GridContainer>
 
-            <GridItem>
-                <center> <Button color="info" type="submit">Submit </Button> </center>
-              </GridItem>
+
               <br/>
               <br/>
 

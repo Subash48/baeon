@@ -1,4 +1,4 @@
-// Implementation of passport js strategies 
+// Implementation of passport js strategies
 
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
@@ -30,7 +30,7 @@ passport.use(new JwtStrategy({
         {
            console.log(err)
             done(err,false);
-            
+
         }
         if(user)
         {
@@ -55,13 +55,13 @@ passport.use(new LocalStrategy((email,password,done)=>{
         if(!user)
             return done(null,false,{ message : 'User does not exists !'});
         // check if password is correct
-        user.comparePassword(password,done);        
+        user.comparePassword(password,done);
     });
 }));
 
 
 
-// Facebook strategy 
+// Facebook strategy
 
 // passport.use(
 //     new FacebookStrategy(
@@ -86,7 +86,7 @@ passport.use(new LocalStrategy((email,password,done)=>{
 //         .catch(()=>{
 //             done(null,false);
 //         })
-        
+
 //       }
 //     )
 //   );
@@ -107,7 +107,7 @@ passport.use(new LocalStrategy((email,password,done)=>{
   passport.serializeUser(function(user, done) {
     done(null, user);
   });
-  
+
   passport.deserializeUser(function(obj, done) {
     done(null, obj);
   });
