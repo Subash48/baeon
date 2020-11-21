@@ -76,6 +76,15 @@ export default class Menu extends Component {
             </span>
           </a>
         </li>
+        <li>
+
+          <a href="/add">
+            <i className="fa fa-th" /> <span> Add Coupons </span>
+            <span className="pull-right-container">
+              <small className="label pull-right bg-green"></small>
+            </span>
+          </a>
+        </li>
         
 
 

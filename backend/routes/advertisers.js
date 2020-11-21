@@ -9,22 +9,25 @@ const Advertiser= require('../models/advertiserSchema');
 
 /* Endpoint to calculate price */
 advertiserRouter.post("/computePrice", (req, res) => {
+  console.log('backend');
 
+      
       Advertiser.find({}).then((adv)=>{
-
+          console.log(adv);
           let advDisplay = [];
           adv.forEach((advOne)=>{
 
                   advDisplay.push({
                     "businessName" :advOne.businessName,
                     "id" : advOne._id,
-                    "price" : advOne.basePrice + req.body.noOfCoupons === null ? 0 : req.body.noOfCoupons*advOne.perCoupon,
+                    "amount" : advOne.basePrice + (req.body.noOfCoupons === null ? 0 : req.body.noOfCoupons*advOne.perCoupon),
                   })
 
           });
-          res.status(200).json({ advertisers : advDisplay });
+          console.log('check point');
+          res.json({ advertisers : advDisplay });
       }).catch((err) => console.log(err));
-
+    
 });
 
 

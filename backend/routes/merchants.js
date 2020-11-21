@@ -141,10 +141,10 @@ merchantRouter.get('/getApiKey', passport.authenticate('jwt',{session : false}),
 merchantRouter.post('/addProduct',passport.authenticate('jwt',{session : false}),(req,res)=>{
     console.log(req.user.email+' wdcw');
     Merchant.findOne({ email : req.user.email })
-    .then((user)=>{
+    .then((obj)=>{
         const newProduct = new Product(
             {
-                "merchantId" : user._id,
+                "merchantId" : obj._id,
                 "productName" : req.body.productName,
                 "productDesc" : req.body.productDesc,
                 "stock"    : req.body.stock,
@@ -154,10 +154,13 @@ merchantRouter.post('/addProduct',passport.authenticate('jwt',{session : false})
             console.log(newProduct);
             newProduct.save()
                 .then(()=> res.status(201).json({ msg : 'Product details added successfully' } ))
-                .catch((err)=> res.status(422).json({ msg : 'There was an error in the product details' }))
+                .catch((err)=> {
+                    console.log(err);
+                    res.status(422).json({ msg : 'There was an error in the product details' , err : err })
+                })
     })
-    .catch(()=>{
-        res.json({ msg : 'There was an error finding the merchant details for your account !'})
+    .catch((err)=>{
+        res.json({ msg : err + 'There was an error finding the merchant details for your account !'})
     })
 
 })
@@ -224,7 +227,7 @@ merchantRouter.get('/deleteProduct',passport.authenticate('jwt',{session : false
 // Addition of new coupon to product in inventory
 merchantRouter.post('/addCoupon',passport.authenticate('jwt',{session : false}),(req,res)=>{
 
-    Merchant.findOne({ email : "crescita2020@gmail.com" })
+    Merchant.findOne({ email : req.user.email })
     .then((user)=>{
     const newPromotion = new Coupon({
         "merchantId" : user._id,
@@ -250,7 +253,7 @@ merchantRouter.post('/addCoupon',passport.authenticate('jwt',{session : false}),
 
 merchantRouter.get('/getCoupons',passport.authenticate('jwt',{session : false}),(req,res)=>{
 
-    Merchant.findOne({ email : "crescita2020@gmail.com" })
+    Merchant.findOne({ email : req.user.email })
     .then((user)=>{
       Coupon.find({ merchantId : user._id })
       .then((coupons)=>{
@@ -297,10 +300,10 @@ merchantRouter.get('/getCoupons',passport.authenticate('jwt',{session : false}),
 });
 
 
-merchantRouter.get('/getProductsByApi',(req,res)=>{
+merchantRouter.get('/getProductsByApi',passport.authenticate('jwt',{session : false}),(req,res)=>{
     // User.findOne({apikey : req.query.apikey })
     // .then((user)=>{
-    Merchant.findOne({ email : "crescita2020@gmail.com" })
+    Merchant.findOne({ email : req.user.email })
     .then((users)=>{
 
         Product.find({ merchantId : users._id})

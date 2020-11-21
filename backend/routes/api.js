@@ -1046,10 +1046,10 @@ apiRouter.patch('/product',passport.authenticate('headerapikey',{ session : fals
 
 
  /* Coupon related API endpoints*/
- apiRouter.post("/order", (req, res) => {
+ apiRouter.post("/order", passport.authenticate('jwt',{session : false}),(req, res) => {
 
 
-  User.findOne({ email : "crescita2020@gmail.com" })
+  User.findOne({ email : req.user.email })
   .then((users)=>{
 
     Merchant.findOne({ email : users.email })

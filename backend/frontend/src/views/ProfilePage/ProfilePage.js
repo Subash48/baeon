@@ -83,11 +83,7 @@ export default function ProfilePage(props) {
 
 
                     <p> <font color="white">
-                    {/* { account.firstName }  , { account.lastName  } ,  { account.businessEmail}, { account. businessAddress_1 },
-                    { account. businessAddress_2 } */}
-
-              {" "}
-              <div>
+                    <div>
               First Name : { account.firstName }<br /><br/>
               </div>
               <div>

@@ -54,22 +54,27 @@ export default {
                 });
     },
 
-    computePrice : (details) =>{
-      return fetch('/advertiser/computePrice',{
+    computePrice : async (details) =>{
+      console.log('here comp');
+      console.log(JSON.stringify(details));
+      return await fetch('/advertiser/computePrice',{
         method: "post",
         body : JSON.stringify(details),
+        credentials: "include",
         headers:{
             'Content-Type' : 'application/json',
         }
-    }).then(response=>{
+    }).then(async (response)=>{
         //if(response.status !== 401){
             //console.log(response.json())
             console.log('here in service');
-            return response.json().then(data => data);
+            //console.log(response.json());
+            return await response.json().then(data => data);
         //}
         //else
         //    return { err : 'error message'};
-    });
+    }).catch((err) => console.log(err))
+
     }
 
 }

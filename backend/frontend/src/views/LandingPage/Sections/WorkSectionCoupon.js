@@ -12,7 +12,7 @@ import {
   GoogleMap,
   withScriptjs,
   Marker,
-  Circle
+  Circle 
 } from "react-google-maps";
 // core components
 import InputLabel from '@material-ui/core/InputLabel';
@@ -38,35 +38,7 @@ const useStyles = makeStyles(styles);
 
 let s = 0;
 
-/*jshint esversion: 6 */
-// const paymentHandler = async (e) => {
-//   const API_URL = '/'
-//   e.preventDefault();
-//   const orderUrl = '/api/order'
-//   const response = await axios.post(orderUrl,{
-//     amount : 100
-//   });
-//   const { data } = response;
-//   const options = {
-//     key: 'rzp_test_KNoCu64wQKXO55',
-//     name: "BAEON",
-//     description: "We find the best discounts for you",
-//     order_id: data.id,
-//     handler: async (response) => {
-//       try {
-//        const paymentId = response.razorpay_payment_id;
-//        const url = `${API_URL}api/capture/${paymentId}`;
-//        const captureResponse = await axios.post(url, {})
-//        console.log(captureResponse.data);
-//       } catch (err) {
-//         console.log(err);
-//       }
-//     },  theme: {
-//       color: "#686CFD",
-//     },
-//   };
-//   const rzp1 = new window.Razorpay(options);
-//   rzp1.open();};
+
 
 
 const data = [
@@ -275,7 +247,6 @@ export default function WorkSection(props) {
       couponValue =  Number((coupon.offerValue*price.productPrice)/100);
 
       }
-
       var calcPrice =0;
       calcPrice = Number(couponValue*coupon.couponNumber/100 + (couponValue*coupon.couponNumber/10) + (coupon.radius/1000)*((couponValue*2.5*coupon.couponNumber)/100) );
       console.log(calcPrice);
@@ -299,7 +270,7 @@ export default function WorkSection(props) {
   const paymentHandler = async (e) => {
     //compute();
     console.log('here');
-    console.log(advertisers[s].id);
+    console.log(advertisers[s]);
     const API_URL = '/'
     e.preventDefault();
     const orderUrl = '/api/order'
@@ -359,13 +330,15 @@ export default function WorkSection(props) {
     console.log(e);
     setCoupon({...coupon,[e.target.name] : e.target.value});
     let data= {
-      noOfCoupons : coupon.couponNo
+      noOfCoupons : (coupon.couponNumber === undefined? 0 : coupon.couponNumber)
     };
-    ProductService.computePrice().then(data =>{
-        console.log('here');
-        setAdvertisers(data.advertisers);
-        console.log(data.advertisers);
-        console.log(coupon);
+    console.log(data)
+
+    ProductService.computePrice(data).then(out =>{
+        console.log('here2'+out);
+        setAdvertisers(out.advertisers);
+        // console.log(data.advertisers);
+        // console.log(coupon);
                   //console.log(products);
     })
     .catch((err)=>{
@@ -548,7 +521,7 @@ export default function WorkSection(props) {
                   name="couponNumber"
                   type="number"
                   value={coupon.couponNumber}
-                  onChange={handleNo}
+                  onChange={ handleNo }
                   className = {classes.textField}
                   InputProps={{
                     className: classes.input,
