@@ -32,7 +32,7 @@ const merchantRouter = require('./routes/merchants');
 app.use('/merchant',merchantRouter);
 
 const apiRouter = require('./routes/api');
-app.use('/api',apiRouter);
+app.use('/api',apiRouter); 
 
 //Update when moving to production
 app.use(express.static(path.join(__dirname, 'frontend/build')));
